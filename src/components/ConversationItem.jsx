@@ -10,13 +10,13 @@ const ConversationItem = (props) => {
         {props.data.name[0]}
         {/* <AccountCircleOutlinedIcon className='isss'/> */}
       </div>
-      <div className='conv-title'>
+      <div className={'conv-title'}>
         {props.data.name}
       </div>
       <div className='conv-lastmessage'>
         {props.data.lastMessage}
       </div>
-      <div className="conv-timestamp">
+      <div className={"conv-timestamp"}>
         {props.data.timeStamp}
       </div>
     </div>

@@ -8,10 +8,10 @@ import CreateGroup from './CreateGroup'
 import OnlineUsers from './OnlineUsers'
 import { Outlet } from "react-router-dom"
 
-const MainContainer = () => {
+const MainContainer = (props) => {
 
   return (
-    <div className='main-container'>
+    <div className={'main-container' + (!props.nightMode ? "" : " dark-container")}>
       <Sidebar />
       <Outlet />
       {/* <BrowserRouter>

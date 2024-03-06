@@ -8,9 +8,12 @@ import CreateGroup from './components/CreateGroup'
 import ChatArea from './components/ChatArea'
 import OnlineUsers from './components/OnlineUsers'
 import Groups from './components/Groups'
+import { useSelector, useDispatch } from 'react-redux'
+import { toggleTheme } from './features/themeSlice'
+import { store } from './features/store'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const nightMode = useSelector(state => state.themeKey);
   const [conversation, setConversation] = useState(
     {
       name: "test1",
@@ -20,15 +23,15 @@ function App() {
 
   return (
     <>
-      <div className='app'>
+      <div className={"app"+(!nightMode ? "" : " dark")}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<MainContainer />}>
+            <Route path="/" element={<MainContainer nightMode={nightMode} />}>
               <Route path="/" element={<Welcome />} />
-              <Route path="/create-group" element={<CreateGroup />} />
-              <Route path="/chat" element={<ChatArea data={conversation} />} />
-              <Route path="/online-users" element={<OnlineUsers />} />
-              <Route path="/groups" element={<Groups />} />
+              <Route path="/create-group" element={<CreateGroup nightMode={nightMode}/>} />
+              <Route path="/chat" element={<ChatArea data={conversation} nightMode={nightMode}/>} />
+              <Route path="/online-users" element={<OnlineUsers nightMode={nightMode}/>} />
+              <Route path="/groups" element={<Groups nightMode={nightMode}/>} />
             </Route>
             <Route path="/login" element={<Login />} />
           </Routes>
