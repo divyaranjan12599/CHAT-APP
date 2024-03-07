@@ -11,6 +11,7 @@ import Groups from './components/Groups'
 import { useSelector, useDispatch } from 'react-redux'
 import { toggleTheme } from './features/themeSlice'
 import { store } from './features/store'
+import Signup from './components/Signup'
 
 function App() {
   const nightMode = useSelector(state => state.themeKey);
@@ -34,6 +35,7 @@ function App() {
               <Route path="/groups" element={<Groups nightMode={nightMode}/>} />
             </Route>
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
           </Routes>
         </BrowserRouter>
       </div>

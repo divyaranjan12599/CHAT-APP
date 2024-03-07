@@ -1,19 +1,44 @@
 import express from "express";
+import mongoose from 'mongoose';
+import userRoutes from "./Routes/userRoutes.js";
+import { CustomError } from "./CustomErrors/CustomErrors.js";
+import errorHandler from "./CustomErrors/ErrorHandler.js";
+
 // import dotenv from 'dotenv'
 // dotenv.config()
 
-// express app
 const app = express();
 const port = process.env.PORT || 3000
 
-// routes
-app.get("/", (req,res)=>{
+app.use(express.json());
+
+
+
+app.get("/", (req, res) => {
     res.json({
-        msg:"Welllcooome...."
+        msg: "Welllcooome...."
     });
 })
 
+app.use("/user", userRoutes);
+
+
+app.use(errorHandler);
+
+const MONGO_URI = process.env.MONGO_URI;
+// console.log(MONGO_URI);
+
+const connectDb = async () => {
+    try {
+        const connect = await mongoose.connect(MONGO_URI);
+        console.log("Db connected...");
+    } catch (error) {
+        console.log("Db is not connected!!!");
+    }
+}
+
+connectDb();
 // listen for requests
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log("listening on port", port);
 })

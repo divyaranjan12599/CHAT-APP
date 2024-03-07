@@ -9,7 +9,30 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from "framer-motion"
 
-const Login = () => {
+const Signup = () => {
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+    const [error, setError] = useState('');
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        console.log(name, value);
+
+        // Update form data
+        setFormData({ ...formData, [name]: value });
+
+        // Validate password and confirm password on change
+        if (name === 'confirmPassword' && value !== formData.password) {
+            setError('Passwords do not match');
+        } else {
+            setError('');
+        }
+    };
+
     const [showPassword, setShowPassword] = useState(false)
 
     const theme = createTheme({
@@ -24,7 +47,7 @@ const Login = () => {
     const handleSubmit = (event) => {
         // Prevent the default form submission behavior
         event.preventDefault();
-        // Add your login logic here
+        // Add your Signup logic here
     };
 
     const handleTogglePasswordVisibility = () => {
@@ -49,14 +72,16 @@ const Login = () => {
                     transition={{
                         ease: "anticipate",
                         duration: "0.3",
-                    }}
-                    className='login-box'>
-                    <p>Login to your Account</p>
+                    }} className='login-box'>
+                    <p>Create an Account</p>
                     <ThemeProvider theme={theme}>
                         <form action={handleSubmit} className='login-form'>
-                            <TextField id="outlined-basic1" label="Username or Email" variant="outlined" />
-                            <TextField id="password"
+                            <TextField id="outlined-basic1" label="Name" variant="outlined" />
+                            <TextField id="outlined-basic1" label="Username" variant="outlined" />
+                            <TextField id="outlined-basic1" label="Email" variant="outlined" />
+                            <TextField name="password"
                                 style={{ width: '100%' }}
+                                onChange={handleChange}
                                 label="Password" type={showPassword ? 'text' : 'password'} variant="outlined"
                                 InputProps={{
                                     endAdornment: (
@@ -71,10 +96,28 @@ const Login = () => {
                                         </IconButton>
                                     ),
                                 }} />
+                            <TextField name="confirmPassword"
+                                style={{ width: '100%' }}
+                                onChange={handleChange}
+                                label="Confirm Password" type={showPassword ? 'text' : 'password'} variant="outlined"
+                                InputProps={{
+                                    endAdornment: (
+                                        <IconButton onClick={handleTogglePasswordVisibility}
+                                            disableTouchRipple
+                                            disableRipple
+                                            size='small'
+                                            style={{ margin: '-25px' }}>
+                                            {/* <button onClick={handleTogglePasswordVisibility} className='visibility-button'> */}
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            {/* </button> */}
+                                        </IconButton>
+                                    ),
+                                }} />
+                            {error && <div>{error}</div>}
                             <Button variant="outlined" size="medium">
-                                Login
+                                Signup
                             </Button>
-                            <Link to="/signup">Create an account?</Link>
+                            <Link to="/login">Already have an account?</Link>
                         </form>
                     </ThemeProvider>
                 </motion.div>
@@ -83,4 +126,4 @@ const Login = () => {
     );
 }
 
-export default Login;
+export default Signup;
