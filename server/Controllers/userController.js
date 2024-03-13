@@ -36,17 +36,17 @@ export const registerController = expressAsyncHandler(async (req, res) => {
     }
     const userExist = await UserModel.findOne({ email });
     if (userExist) {
-        throw new UserExistsError("User already exists!!!");
+        throw new UserExistsError("User already exists with this email id !!!");
     }
-    
+
     const userNameExist = await UserModel.findOne({ username });
     if (userNameExist) {
-        throw new UserExistsError("UserName already taken!!!");
+        throw new UserExistsError("Username already taken !!!");
     }
-    
+
     // console.log(name, username, email, password);
     const user = await UserModel.create({ name, username, email, password });
-    // console.log(user);
+    console.log(user);
     if (user) {
         res.status(201).json({
             _id: user._id,
@@ -61,4 +61,22 @@ export const registerController = expressAsyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("Registration Failed!!!");
     }
+});
+
+export const fetchAllUsersController = expressAsyncHandler(async (req, res) => {
+    console.log("fetchallusercontroller");
+    const keyword = req.query.search
+        ? {
+            $or: [
+                { name: { $regex: req.query.search, $options: "i" } },
+                { email: { $regex: req.query.search, $options: "i" } },
+            ],
+        }
+        : {};
+
+    const users = await UserModel.find(keyword).find({
+        _id: { $ne: req.user._id },
+    });
+
+    res.send(users);
 });

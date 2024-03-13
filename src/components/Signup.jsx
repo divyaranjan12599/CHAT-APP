@@ -1,16 +1,29 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Backdrop from '@mui/material/Backdrop';
 import { createTheme, ThemeProvider } from '@mui/material/styles'; // Import from '@mui/material/styles'
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Link, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from "framer-motion"
+import Toaster from './Toaster';
+import axios from 'axios';
 
 const Signup = () => {
+    const [loading, setloading] = useState(false);
+    const [signupStatus, setsignupStatus] = useState({
+        message: '',
+        key: ''
+    })
+
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
+        name: '',
         username: '',
         email: '',
         password: '',
@@ -20,7 +33,7 @@ const Signup = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(name, value);
+        // console.log(name, value);
 
         // Update form data
         setFormData({ ...formData, [name]: value });
@@ -44,10 +57,42 @@ const Signup = () => {
         },
     });
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         // Prevent the default form submission behavior
         event.preventDefault();
         // Add your Signup logic here
+        setloading(true);
+        console.log(formData);
+        try {
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                }
+            }
+            const res = await axios.post(
+                "api/user/register/",
+                formData,
+                config
+            );
+            console.log("Signup: ", res);
+            setsignupStatus({
+                message: "success",
+                key: Math.random()
+            });
+            // navigate("/");
+            localStorage.setItem("userData", JSON.stringify(res));
+            navigate("/welcome");
+        } catch (error) {
+            console.log(error.response);
+            setsignupStatus({
+                message: error.response.data.message,
+                key: Math.random()
+            });
+            // console.log("Error: ", error);
+        }
+        finally{
+            setloading(false);
+        }
     };
 
     const handleTogglePasswordVisibility = () => {
@@ -75,11 +120,11 @@ const Signup = () => {
                     }} className='login-box'>
                     <p>Create an Account</p>
                     <ThemeProvider theme={theme}>
-                        <form action={handleSubmit} className='login-form'>
-                            <TextField id="outlined-basic1" label="Name" variant="outlined" />
-                            <TextField id="outlined-basic1" label="Username" variant="outlined" />
-                            <TextField id="outlined-basic1" label="Email" variant="outlined" />
-                            <TextField name="password"
+                        <form onSubmit={handleSubmit} className='login-form'>
+                            <TextField required onChange={handleChange} name='name' label="Name" variant="outlined" />
+                            <TextField required onChange={handleChange} name='username' label="Username" variant="outlined" />
+                            <TextField required onChange={handleChange} name='email' label="Email" variant="outlined" />
+                            <TextField required name="password"
                                 style={{ width: '100%' }}
                                 onChange={handleChange}
                                 label="Password" type={showPassword ? 'text' : 'password'} variant="outlined"
@@ -96,7 +141,7 @@ const Signup = () => {
                                         </IconButton>
                                     ),
                                 }} />
-                            <TextField name="confirmPassword"
+                            <TextField required name="confirmPassword"
                                 style={{ width: '100%' }}
                                 onChange={handleChange}
                                 label="Confirm Password" type={showPassword ? 'text' : 'password'} variant="outlined"
@@ -114,14 +159,20 @@ const Signup = () => {
                                     ),
                                 }} />
                             {error && <div>{error}</div>}
-                            <Button variant="outlined" size="medium">
+                            <Button type='submit' variant="outlined" size="medium" style={{ width: '100%' }}>
                                 Signup
                             </Button>
                             <Link to="/login">Already have an account?</Link>
+                            {(signupStatus.message !== '') ? (
+                                <Toaster key={signupStatus.key + '_signup'} message={signupStatus.message} />
+                            ) : null}
                         </form>
                     </ThemeProvider>
                 </motion.div>
             </motion.div>
+            <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </AnimatePresence>
     );
 }

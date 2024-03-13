@@ -30,3 +30,9 @@ export class InvalidDetails extends CustomError {
     }
 }
 
+export class AuthorizationError extends CustomError {
+    constructor(msg) {
+        super(msg);
+    }
+}
+

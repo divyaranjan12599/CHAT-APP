@@ -57,7 +57,7 @@ const Sidebar = () => {
                     </IconButton>
                 </div>
                 <div className='sidebar-header-icons'>
-                    <IconButton className={(!nightMode ? "" : "dark")} onClick={() => { navigate("online-users") }}>
+                    <IconButton className={(!nightMode ? "" : "dark")} onClick={() => { navigate("users") }}>
                         <PersonAddAltOutlinedIcon />
                     </IconButton>
                     <IconButton className={(!nightMode ? "" : "dark")} onClick={() => { navigate("groups") }}>
