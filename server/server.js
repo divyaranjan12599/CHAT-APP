@@ -1,6 +1,9 @@
 import express from "express";
 import mongoose from 'mongoose';
 import userRoutes from "./Routes/userRoutes.js";
+import chatRoutes from "./Routes/chatRoutes.js";
+import groupRoutes from "./Routes/groupRoutes.js";
+import messageRoutes from "./Routes/messageRoutes.js";
 import { CustomError } from "./CustomErrors/CustomErrors.js";
 import errorHandler from "./CustomErrors/ErrorHandler.js";
 import cors from 'cors';
@@ -26,6 +29,9 @@ app.get("/", (req, res) => {
 })
 
 app.use("/user", userRoutes);
+app.use("/chat", chatRoutes);
+app.use("/group", groupRoutes);
+app.use("/message", messageRoutes);
 
 
 app.use(errorHandler);

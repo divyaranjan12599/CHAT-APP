@@ -1,9 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IconButton } from '@mui/material'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { AnimatePresence, motion } from "framer-motion"
 
 const Groups = (props) => {
+
+  const [groups, SetGroups] = useState([]);
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  // console.log("Data from LocalStorage : ", userData);
+  const nav = useNavigate();
+  
+  useEffect(() => {
+    if (!userData) {
+      console.log("User not Authenticated");
+      nav("/");
+    }
+    const user = userData.data;
+    console.log("Users refreshed : ", user.token);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    axios
+      .get("api/group/fetchGroups", config)
+      .then((response) => {
+        console.log("Group Data from API ", response.data);
+        SetGroups(response.data);
+      });
+  }, [refresh]);
+
+
+
   return (
     <AnimatePresence>
       <motion.div
@@ -29,7 +58,38 @@ const Groups = (props) => {
         </div>
 
         <div>
-          <motion.div
+        {groups.map((group, index) => {
+            return (
+              <motion.div
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                className={"list-tem" + (lightTheme ? "" : " dark")}
+                key={index}
+                onClick={() => {
+                  console.log("Creating chat with group", group.name);
+                  // const config = {
+                  //   headers: {
+                  //     Authorization: `Bearer ${userData.data.token}`,
+                  //   },
+                  // };
+                  // axios.post(
+                  //   "api/chat/",
+                  //   {
+                  //     userId: user._id,
+                  //   },
+                  //   config
+                  // );
+                  // dispatch(refreshSidebarFun());
+                }}
+              >
+                <p className={"con-icon" + (lightTheme ? "" : " dark")}>T</p>
+                <p className={"con-title" + (lightTheme ? "" : " dark")}>
+                  {group.chatName}
+                </p>
+              </motion.div>
+            );
+          })}
+          {/* <motion.div
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
             className={'list-item' + (!props.nightMode ? "" : " dark")}>
@@ -42,7 +102,7 @@ const Groups = (props) => {
             className={'list-item' + (!props.nightMode ? "" : " dark")}>
             <p className='conv-icon'>T</p>
             <p className='conv-title'>GroupName1</p>
-          </motion.div>
+          </motion.div> */}
         </div>
       </motion.div>
     </AnimatePresence>

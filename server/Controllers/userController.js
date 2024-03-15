@@ -46,7 +46,7 @@ export const registerController = expressAsyncHandler(async (req, res) => {
 
     // console.log(name, username, email, password);
     const user = await UserModel.create({ name, username, email, password });
-    console.log(user);
+    // console.log(user);
     if (user) {
         res.status(201).json({
             _id: user._id,
@@ -64,7 +64,7 @@ export const registerController = expressAsyncHandler(async (req, res) => {
 });
 
 export const fetchAllUsersController = expressAsyncHandler(async (req, res) => {
-    console.log("fetchallusercontroller");
+    // console.log("fetchallusercontroller");
     const keyword = req.query.search
         ? {
             $or: [

@@ -26,7 +26,7 @@ const Users = (props) => {
           },
         };
 
-        const response = await axios.get("/api/user/fetchusers", config);
+        const response = await axios.get("api/user/fetchusers", config);
         console.log("User data from API", response.data);
         setUsers(response.data);
       }
@@ -37,7 +37,7 @@ const Users = (props) => {
     };
 
     fetchUsers();
-  }, [refresh, userData, navigate]);
+  }, [refresh]);
 
   return (
     <AnimatePresence>
@@ -86,9 +86,13 @@ const Users = (props) => {
                   );
                 }}
               >
-                <p className='conv-icon'>T</p>
-                <p className='conv-title'>{user.name}</p>
-                <p>@{user.username}</p>
+                <div>
+                  <p className='conv-icon'>T</p>
+                </div>
+                <div>
+                  <p className='conv-title'>{user.name}</p>
+                  <p>@{user.username}</p>
+                </div>
               </motion.div>
             )
           })

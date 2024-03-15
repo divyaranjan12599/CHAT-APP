@@ -36,3 +36,9 @@ export class AuthorizationError extends CustomError {
     }
 }
 
+export class FetchingChatError extends CustomError {
+    constructor(msg) {
+        super(msg);
+    }
+}
+

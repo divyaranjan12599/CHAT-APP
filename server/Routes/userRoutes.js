@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post("/login", loginController);
 router.post("/register", registerController);
-router.post("/fetchusers", protect, fetchAllUsersController);
+router.get("/fetchusers", protect, fetchAllUsersController);
   
 export default router;
