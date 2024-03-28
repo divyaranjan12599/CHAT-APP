@@ -4,6 +4,7 @@ import User from "../Models/userModel.js"
 import Chat from "../Models/chatModel.js"
 
 export const allMessages = expressAsyncHandler(async (req, res) => {
+    console.log("all messages controller...");
     try {
         const messages = await Message.find({ chat: req.params.chatId })
             .populate("sender", "name email")
@@ -17,6 +18,7 @@ export const allMessages = expressAsyncHandler(async (req, res) => {
 });
 
 export const sendMessage = expressAsyncHandler(async (req, res) => {
+    console.log("send message controller");
     const { content, chatId } = req.body;
 
     if (!content || !chatId) {
@@ -33,7 +35,6 @@ export const sendMessage = expressAsyncHandler(async (req, res) => {
     try {
         var message = await Message.create(newMessage);
 
-        console.log(message);
         message = await message.populate("sender", "name pic");
         message = await message.populate("chat");
         message = await message.populate("reciever");
@@ -41,8 +42,9 @@ export const sendMessage = expressAsyncHandler(async (req, res) => {
             path: "chat.users",
             select: "name email",
         });
-
+        
         await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
+        // console.log("send message ------------------------ =============================",message);
         res.json(message);
     } catch (error) {
         res.status(400);

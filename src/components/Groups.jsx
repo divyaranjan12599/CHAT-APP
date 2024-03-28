@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IconButton } from '@mui/material'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { AnimatePresence, motion } from "framer-motion"
+import { useNavigate } from 'react-router-dom'
+import axios from "axios"
 
 const Groups = (props) => {
 
-  const [groups, SetGroups] = useState([]);
+  const [groups, setGroups] = useState([]);
+  const [refresh, setrefresh] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData"));
   // console.log("Data from LocalStorage : ", userData);
   const nav = useNavigate();
@@ -27,7 +30,7 @@ const Groups = (props) => {
       .get("api/group/fetchGroups", config)
       .then((response) => {
         console.log("Group Data from API ", response.data);
-        SetGroups(response.data);
+        setGroups(response.data);
       });
   }, [refresh]);
 

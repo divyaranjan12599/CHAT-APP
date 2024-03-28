@@ -6,7 +6,7 @@ import { AuthorizationError } from "../CustomErrors/CustomErrors.js";
 const protect = expressAsyncHandler(
     async (req, res, next) => {
         let token;
-        console.log("protect", req.headers);
+        // console.log("protect", req.headers);
         if (req.headers.authorization &&
             req.headers.authorization.startsWith("Bearer")) {
             try {

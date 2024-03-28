@@ -40,7 +40,7 @@ const Sidebar = () => {
 
         axios.get("/api/chat/", config)
         .then((res)=>{
-            console.log("chat api:",res.data);
+            // console.log("chat api:",res.data);
             if(res.data) setConversations(res.data);
         });
 
@@ -92,7 +92,7 @@ const Sidebar = () => {
             <div className={'sb-conversation' + (!nightMode ? "" : " dark")}>
                 {
                     conversations.length === 0 ? <ConversationItem nightMode={nightMode} /> : conversations.map((conversation, index) => {
-                        console.log(conversation, index);
+                        // console.log(conversation, index);
                         let chatName = "";
                         let username = "";
                         if(conversation.isGroupChat){

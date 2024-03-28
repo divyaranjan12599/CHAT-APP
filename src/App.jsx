@@ -16,12 +16,6 @@ import Users from './components/Users'
 
 function App() {
   const nightMode = useSelector(state => state.themeKey);
-  const [conversation, setConversation] = useState(
-    {
-      name: "test1",
-      messages: [],
-      timeStamp: "today"
-    });
 
   return (
     <>
@@ -31,7 +25,7 @@ function App() {
             <Route path="/" element={<MainContainer nightMode={nightMode} />}>
               <Route path="/welcome" element={<Welcome />} />
               <Route path="/create-group" element={<CreateGroup nightMode={nightMode}/>} />
-              <Route path="/chat/:_id" element={<ChatArea data={conversation} nightMode={nightMode}/>} />
+              <Route path="/chat/:_id" element={<ChatArea nightMode={nightMode}/>} />
               <Route path="/users" element={<Users nightMode={nightMode}/>} />
               <Route path="/groups" element={<Groups nightMode={nightMode}/>} />
             </Route>

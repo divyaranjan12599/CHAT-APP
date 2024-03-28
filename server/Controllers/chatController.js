@@ -52,21 +52,19 @@ export const fetchChats = expressAsyncHandler(async (req, res) => {
     console.log("fetch chat controller");
 
     try {
-        const chats = await Chat.find({
-            users: { $elemMatch: { $eq: req.user._id } }
-        })
+        // console.log("Fetch Chats aPI : ", req);
+        Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
             .populate("users", "-password")
             .populate("groupAdmin", "-password")
             .populate("latestMessage")
-            .sort({ upadatedAt: -1 })
+            .sort({ updatedAt: -1 })
             .then(async (results) => {
                 results = await User.populate(results, {
                     path: "latestMessage.sender",
-                    select: "name username email"
+                    select: "name email",
                 });
+                res.status(200).send(results);
             });
-
-        res.status(200).json(chats);
 
     } catch (error) {
         res.status(400);

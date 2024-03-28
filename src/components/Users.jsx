@@ -83,11 +83,23 @@ const Users = (props) => {
                       userId: user._id,
                     },
                     config
+                  ).then(res => {
+                    console.log("chat created: ", res);
+                    navigate(
+                      "/chat/" +
+                      res.data._id +
+                      "&" +
+                      res.data.users[1].name + 
+                      "&" +
+                      res.data.users[1].username
+                    );
+                  }
                   );
+
                 }}
               >
                 <div>
-                  <p className='conv-icon'>T</p>
+                  <p className='conv-icon'>{user.name[0]}</p>
                 </div>
                 <div>
                   <p className='conv-title'>{user.name}</p>
@@ -99,8 +111,8 @@ const Users = (props) => {
 
           }
         </div>
-      </motion.div>
-    </AnimatePresence>
+      </motion.div >
+    </AnimatePresence >
   )
 }
 
